@@ -13,7 +13,7 @@ class WelcomeController: UIViewController {
     let bg: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .cyan
+        view.backgroundColor = .blue
         view.layer.cornerRadius = 6
         return view
     }()
