@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9E7C0224278362B30038C49D /* GDGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7C0223278362B30038C49D /* GDGradient.swift */; };
+		9E7C0227278372060038C49D /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7C0226278372060038C49D /* extension.swift */; };
 		9EE53163277B8F1300BA9645 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE53162277B8F1300BA9645 /* AppDelegate.swift */; };
 		9EE53165277B8F1300BA9645 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE53164277B8F1300BA9645 /* SceneDelegate.swift */; };
 		9EE53167277B8F1300BA9645 /* WelcomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EE53166277B8F1300BA9645 /* WelcomeController.swift */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9E7C0223278362B30038C49D /* GDGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GDGradient.swift; sourceTree = "<group>"; };
+		9E7C0226278372060038C49D /* extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
 		9EE5315F277B8F1300BA9645 /* GetItDone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GetItDone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EE53162277B8F1300BA9645 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9EE53164277B8F1300BA9645 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -37,6 +41,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9E7C0225278371E70038C49D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9E7C0226278372060038C49D /* extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		9EE53156277B8F1300BA9645 = {
 			isa = PBXGroup;
 			children = (
@@ -56,6 +68,7 @@
 		9EE53161277B8F1300BA9645 /* GetItDone */ = {
 			isa = PBXGroup;
 			children = (
+				9E7C0225278371E70038C49D /* Extensions */,
 				9EE53162277B8F1300BA9645 /* AppDelegate.swift */,
 				9EE53164277B8F1300BA9645 /* SceneDelegate.swift */,
 				9EE53166277B8F1300BA9645 /* WelcomeController.swift */,
@@ -63,6 +76,7 @@
 				9EE53170277B8F1600BA9645 /* LaunchScreen.storyboard */,
 				9EE53173277B8F1600BA9645 /* Info.plist */,
 				9EE5316B277B8F1300BA9645 /* GetItDone.xcdatamodeld */,
+				9E7C0223278362B30038C49D /* GDGradient.swift */,
 			);
 			path = GetItDone;
 			sourceTree = "<group>";
@@ -140,7 +154,9 @@
 				9EE53167277B8F1300BA9645 /* WelcomeController.swift in Sources */,
 				9EE5316D277B8F1300BA9645 /* GetItDone.xcdatamodeld in Sources */,
 				9EE53163277B8F1300BA9645 /* AppDelegate.swift in Sources */,
+				9E7C0227278372060038C49D /* extension.swift in Sources */,
 				9EE53165277B8F1300BA9645 /* SceneDelegate.swift in Sources */,
+				9E7C0224278362B30038C49D /* GDGradient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
