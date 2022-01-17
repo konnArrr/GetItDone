@@ -24,10 +24,12 @@ class GDGradient: UIView {
 
     
     
-    override init(frame: CGRect) {
+    override init(frame: CGRect = .zero) {
         super.init(frame: frame)
         
-        translatesAutoresizingMaskIntoConstraints = false
+        if frame == .zero {
+            translatesAutoresizingMaskIntoConstraints = false
+        }
         
         if let layer = self.layer as? CAGradientLayer {
             layer.colors = self.hexColors
@@ -35,8 +37,8 @@ class GDGradient: UIView {
         } else {
             print("is not gradient")
         }
-        
     }
+    
     
     override class var layerClass: AnyClass {
         return CAGradientLayer.self
