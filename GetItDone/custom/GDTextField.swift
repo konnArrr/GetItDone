@@ -12,7 +12,7 @@ class GDTextField: UITextField {
     
     var insets: UIEdgeInsets
     
-    init(frame: CGRect = .zero, placeHolder: String = "placeholder", radius: CGFloat = 4, inset: CGFloat = 4) {
+    init(frame: CGRect = .zero, placeHolder: String = "placeholder", radius: CGFloat = 4, inset: CGFloat = 4, size: CGFloat = 16) {
         self.insets = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: 0)
         super.init(frame: frame)
         self.checkIfAutoLayout()
@@ -21,6 +21,7 @@ class GDTextField: UITextField {
         backgroundColor = .white
         layer.cornerRadius = radius
         textColor = .greyZero
+        font = UIFont.init(name: "Raleway-Regular", size: size)
     }
     
     

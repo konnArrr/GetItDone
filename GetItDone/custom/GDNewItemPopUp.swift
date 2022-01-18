@@ -16,9 +16,9 @@ class GDNewItemPopUp: GDGradient {
     
     var delegate: GDNewItemDelegate?
           
-    override init(frame: CGRect = .zero) {
+    init(frame: CGRect = .zero, radius: CGFloat = 14) {
         super.init(frame: frame)
-        self.layer.cornerRadius = 14
+        self.layer.cornerRadius = radius
         
         let inset: CGFloat = 12
         
