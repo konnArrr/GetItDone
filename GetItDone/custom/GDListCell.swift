@@ -10,7 +10,18 @@ import UIKit
 
 class GDListCell: UITableViewCell {
     
-    //    let titleLabel = GDLabel(color: .greyZero, size: 18)
+    
+    var delegate: ListCellDelegate?
+    
+    @objc func toggleStatus() {
+        
+        if let delegate = self.delegate, let toDo = self.toDo {
+            let newToDo = ToDo(id: toDo.id, title: textField.text!, status: !toDo.status)
+            delegate.toogleToDo(updatedToDo: newToDo)
+        }
+    }
+    
+    
     let textField = GDTextField(placeHolder: "todo", inset: 12)
     
     let view: UIView = {
@@ -24,8 +35,7 @@ class GDListCell: UITableViewCell {
     var toDo: ToDo? {
         didSet {
             if let toDo = toDo {
-                checkBox.toogled = toDo.status
-                
+                checkBox.toogled = toDo.status                
                 textField.text = toDo.title
             }
         }
@@ -58,6 +68,8 @@ class GDListCell: UITableViewCell {
         checkBox.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         checkBox.widthAnchor.constraint(equalToConstant: 22).isActive = true
         checkBox.heightAnchor.constraint(equalTo: checkBox.widthAnchor).isActive = true
+        
+        checkBox.addTarget(self, action: #selector(toggleStatus), for: .touchUpInside)
         
     }
     

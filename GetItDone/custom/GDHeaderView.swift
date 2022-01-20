@@ -14,7 +14,7 @@ class GDHeaderView: UIView {
     let bg = GDGradient()
     let titleLabel = GDLabel(size: 14)
     let subTitleLabel = GDLabel(size: 24)
-    let addButton = GDButton(title: "+", type: .squareIcon)
+    let addButton = GDButton(type: .squareIcon)
     
     
     var delegate: GDHeaderDelegate?
@@ -38,7 +38,7 @@ class GDHeaderView: UIView {
         
         addSubview(titleLabel)
         titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 13).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 20 + 8).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 20 + 16).isActive = true
         titleLabel.rightAnchor.constraint(equalTo: centerXAnchor).isActive = true
 
         
@@ -49,7 +49,7 @@ class GDHeaderView: UIView {
         
         addSubview(addButton)
         addButton.bottomAnchor.constraint(equalTo: subTitleLabel.bottomAnchor).isActive = true
-        addButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -20 - 8).isActive = true
+        addButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -20 - 16 - 14).isActive = true
         addButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
         addButton.widthAnchor.constraint(equalTo: addButton.heightAnchor, multiplier: 1).isActive = true
         

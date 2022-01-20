@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class ListController: UIViewController, GDHeaderDelegate, GDNewItemDelegate {
+class ListController: UIViewController {
     
     let header = GDHeaderView(title: "Stuff to get done", subTitle: "4 left")
     
@@ -31,7 +31,7 @@ class ListController: UIViewController, GDHeaderDelegate, GDNewItemDelegate {
     var listData = [ToDo]()
     func setData() {
         listData = [
-            ToDo(id: 0, title: "eat cevapi", status: false),
+            ToDo(id: 0, title: "eat cevapi", status: true),
             ToDo(id: 1, title: "go to museum", status: false),
             ToDo(id: 2, title: "buy tapas at the market", status: false),
             ToDo(id: 3, title: "walk up a mountain", status: true)
@@ -79,6 +79,10 @@ class ListController: UIViewController, GDHeaderDelegate, GDNewItemDelegate {
         
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardDidShowNotification, object: nil)
     }
@@ -89,11 +93,18 @@ class ListController: UIViewController, GDHeaderDelegate, GDNewItemDelegate {
             keyboardHeight = keyboardSize.height
         }
     }
+      
+}
+
+extension ListController: GDHeaderDelegate {
     
-    // Delegate functions
     func openAddItemPopUp() {
         print("trying open add pop up")
     }
+    
+}
+
+extension ListController: GDNewItemDelegate {
     
     func addItemToList(text: String) {
         print("try to add item with text: \(text)")
@@ -114,16 +125,70 @@ extension ListController: UITextFieldDelegate {
     
 }
 
+extension ListController: ListCellDelegate {
+    
+    func toogleToDo(updatedToDo: ToDo) {
+//        if let row = listData.firstIndex(where: {$0.id == id}) {
+//            listData[row].status = status
+//        }
+        listData = listData.map({ toDo in
+            if toDo.id == updatedToDo.id {
+                return updatedToDo
+            }
+            return toDo
+        })
+        listTable.reloadData()
+    }
+}
+
 extension ListController: UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let header = UIView()
+        let titleForHeader = GDLabel(color: .white, size: 20, frame: CGRect(x: 0, y: 0, width: Int(tableView.frame.height), height: 44))
+        if section == 0 {
+            titleForHeader.text = "To Do"
+        } else {
+            titleForHeader.text = "Done"
+        }
+        return titleForHeader
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 25
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listData.count
+        var count = 0
+        listData.forEach { toDoItem in
+            if section == 0 && !toDoItem.status {
+                count += 1
+            } else if section == 1 && toDoItem.status {
+                count += 1
+            }
+        }
+        return count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CELL_ID, for: indexPath) as? GDListCell else {
             return UITableViewCell()
         }
-        cell.toDo = self.listData[indexPath.row]
+        cell.delegate = self
+        var itemsForSection: [ToDo] = []
+        listData.forEach { toDoItem in
+            if indexPath.section == 0 && !toDoItem.status {
+                itemsForSection.append(toDoItem)
+            } else if indexPath.section == 1 && toDoItem.status {
+                itemsForSection.append(toDoItem)
+            }
+        }
+        cell.toDo = itemsForSection[indexPath.row]
         return cell
     }
 }

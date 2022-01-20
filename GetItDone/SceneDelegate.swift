@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let wc = WelcomeController()
-        let navController = UINavigationController(rootViewController: wc)
+        let navController = GDNavigationController(rootViewController: wc)
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = windowScene
