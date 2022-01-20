@@ -38,11 +38,19 @@ class ListController: UIViewController {
         ]
     }
     
+    func updateHeaderItemsLeft() {
+        header.itemsLeft = 0
+        listData.forEach { toDo in
+            if !toDo.status { header.itemsLeft += 1 }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setData()
         
+        updateHeaderItemsLeft()
         
         view.backgroundColor = .white
         navigationItem.hidesBackButton = true
@@ -138,6 +146,7 @@ extension ListController: ListCellDelegate {
             return toDo
         })
         listTable.reloadData()
+        updateHeaderItemsLeft()
     }
 }
 

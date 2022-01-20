@@ -16,7 +16,6 @@ class GDHeaderView: UIView {
     let subTitleLabel = GDLabel(size: 24)
     let addButton = GDButton(type: .squareIcon)
     
-    
     var delegate: GDHeaderDelegate?
     
     init(frame: CGRect = .zero, title: String = "header title", subTitle: String = "header Subtitle") {
@@ -27,6 +26,12 @@ class GDHeaderView: UIView {
         titleLabel.text = title
         subTitleLabel.text = subTitle
         setupLayout()
+    }
+    
+    var itemsLeft: Int = 0 {
+        didSet {
+            subTitleLabel.text = "\(itemsLeft) left"
+        }
     }
     
     func setupLayout() {
