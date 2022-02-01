@@ -20,30 +20,22 @@ class ListController: UIViewController {
         return view
     }()
     
+    var bgBottom: NSLayoutConstraint!
+    
     let listTable = GDTableView()
     
     let CELL_ID = "cell_id"
     
     lazy var popUp = GDNewItemPopUp(radius: tableInset)
     
-    var keyboardHeight: CGFloat = 333
+    var keyboardHeight: CGFloat = 406
   
     var listData = [ToDo]()
+    
     func setData() {
-        listData = [
-            ToDo(id: 0, title: "eat cevapi", status: true),
-            ToDo(id: 1, title: "go to museum", status: false),
-            ToDo(id: 2, title: "buy tapas at the market", status: false),
-            ToDo(id: 3, title: "walk up a mountain", status: true)
-        ]
+        listData = CoreDataManager.shared.fetchToDos()
     }
     
-    func updateHeaderItemsLeft() {
-        header.itemsLeft = 0
-        listData.forEach { toDo in
-            if !toDo.status { header.itemsLeft += 1 }
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +58,8 @@ class ListController: UIViewController {
         bg.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         bg.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20).isActive = true
         bg.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        bg.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -120).isActive = true
+        bgBottom = bg.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -120)
+        bgBottom.isActive = true
         
         view.addSubview(listTable)
         listTable.leftAnchor.constraint(equalTo: bg.leftAnchor, constant: tableInset).isActive = true
@@ -80,11 +73,18 @@ class ListController: UIViewController {
         view.addSubview(popUp)
         popUp.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         popUp.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        popUp.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        popUp.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 90).isActive = true
         popUp.heightAnchor.constraint(equalToConstant: 100).isActive = true
         popUp.textField.delegate = self
         popUp.delegate = self
         
+    }
+    
+    func updateHeaderItemsLeft() {
+        header.itemsLeft = 0
+        listData.forEach { toDo in
+            if !toDo.status { header.itemsLeft += 1 }
+        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -98,7 +98,8 @@ class ListController: UIViewController {
     @objc func keyboardWillShow(notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardSize =  keyboardFrame.cgRectValue.size
-            keyboardHeight = keyboardSize.height
+            keyboardHeight = keyboardSize.height + 70
+            print("keyboardHeight: \(keyboardHeight)")
         }
     }
       
@@ -107,7 +108,7 @@ class ListController: UIViewController {
 extension ListController: GDHeaderDelegate {
     
     func openAddItemPopUp() {
-        print("trying open add pop up")
+        popUp.animatePopup()
     }
     
 }
@@ -115,36 +116,79 @@ extension ListController: GDHeaderDelegate {
 extension ListController: GDNewItemDelegate {
     
     func addItemToList(text: String) {
-        print("try to add item with text: \(text)")
+        if notInList(text: text) {
+//            let newItem = ToDo(id: listData.count, title: text, status: false)
+//            listData.append(newItem)
+            listTable.reloadData()
+            updateHeaderItemsLeft()
+            popUp.animatePopup()
+        }
     }
     
+    func notInList(text: String) -> Bool {
+        var isNotInList = true
+        listData.forEach { toDo in
+            if let title = toDo.title {
+                if title.lowercased() == text.lowercased() {
+                    isNotInList = false
+                }
+            }
+        }
+        return isNotInList
+    }
 }
 
 
 extension ListController: UITextFieldDelegate {
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        popUp.animateView(transform: CGAffineTransform(translationX: 0, y: -keyboardHeight), duration: 0.5)
+        
+        var heightToAnimate = -keyboardHeight + 50
+        // resize the list view
+        
+        if textField == popUp.textField {
+            // brings up the popup
+            popUp.animateView(transform: CGAffineTransform(translationX: 0, y: -keyboardHeight), duration: 0.5)
+            heightToAnimate -= 70
+        }
+        bgBottom.constant = heightToAnimate
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        popUp.animateView(transform: CGAffineTransform(translationX: 0, y: 0), duration: 0.6)
+        // resize the list view
+        bgBottom.constant = -120
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+        if textField == popUp.textField {
+            // brings down the popup
+            popUp.animateView(transform: CGAffineTransform(translationX: 0, y: 0), duration: 0.6)
+        }
     }
     
 }
 
 extension ListController: ListCellDelegate {
     
-    func toogleToDo(updatedToDo: ToDo) {
+    func toogleToDo() {
 //        if let row = listData.firstIndex(where: {$0.id == id}) {
 //            listData[row].status = status
 //        }
-        listData = listData.map({ toDo in
-            if toDo.id == updatedToDo.id {
-                return updatedToDo
-            }
-            return toDo
-        })
+//        listData = listData.map({ toDo in
+//            if toDo.id == updatedToDo.id {
+//                return updatedToDo
+//            }
+//            return toDo
+//        })
+        listData = CoreDataManager.shared.fetchToDos()
         listTable.reloadData()
         updateHeaderItemsLeft()
     }
@@ -158,7 +202,6 @@ extension ListController: UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let header = UIView()
         let titleForHeader = GDLabel(color: .white, size: 20, frame: CGRect(x: 0, y: 0, width: Int(tableView.frame.height), height: 44))
         if section == 0 {
             titleForHeader.text = "To Do"
@@ -189,6 +232,7 @@ extension ListController: UITableViewDataSource {
             return UITableViewCell()
         }
         cell.delegate = self
+        cell.textField.delegate = self
         var itemsForSection: [ToDo] = []
         listData.forEach { toDoItem in
             if indexPath.section == 0 && !toDoItem.status {

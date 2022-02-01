@@ -14,11 +14,17 @@ class GDNewItemPopUp: GDGradient {
     let addBut = GDButton(title: "  add  ", type: .roundedText, radius: 4)
     let textField = GDTextField(placeHolder: "get some stuff")
     
+    var popupLocation: CGFloat = -90
+    
     var delegate: GDNewItemDelegate?
           
     init(frame: CGRect = .zero, radius: CGFloat = 14) {
         super.init(frame: frame)
+        
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animatePopup)))
+        
         self.layer.cornerRadius = radius
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         let inset: CGFloat = 12
         
@@ -47,10 +53,22 @@ class GDNewItemPopUp: GDGradient {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc func animatePopup() {
+        textField.resignFirstResponder()
+        textField.text = ""
+        animateView(transform: CGAffineTransform(translationX: 0, y: popupLocation), duration: 0.3)
+        if popupLocation == -90 {
+            popupLocation = 0
+        } else {
+            popupLocation = -90
+            textField.resignFirstResponder()
+        }
+    }
+    
     // Button handler
     
     @objc func handleCancel() {
-        textField.resignFirstResponder()
+        animatePopup()
     }
     
     @objc func handleAdd() {
