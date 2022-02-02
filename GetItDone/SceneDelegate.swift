@@ -19,10 +19,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        let wc = WelcomeController()
-        let navController = GDNavigationController(rootViewController: wc)
-        
-        
+        let hasVisitedWelcomeController = UserDefaults.standard.bool(forKey: "welcome-controller-visited")
+        let initialController = hasVisitedWelcomeController ? ListController() : WelcomeController()
+        let navController = GDNavigationController(rootViewController: initialController)
+                
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.windowScene = windowScene
         window?.rootViewController = navController

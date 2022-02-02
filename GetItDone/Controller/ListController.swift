@@ -32,6 +32,8 @@ class ListController: UIViewController {
   
     var listData = [ToDo]()
     
+    var toDoToUpdate: ToDo?
+    
     func setData() {
         listData = CoreDataManager.shared.fetchToDos()
     }
@@ -119,6 +121,8 @@ extension ListController: GDNewItemDelegate {
         if notInList(text: text) {
 //            let newItem = ToDo(id: listData.count, title: text, status: false)
 //            listData.append(newItem)
+            CoreDataManager.shared.createToDo(id: Double(listData.count), title: text, status: false)
+            listData = CoreDataManager.shared.fetchToDos()
             listTable.reloadData()
             updateHeaderItemsLeft()
             popUp.animatePopup()
@@ -155,7 +159,10 @@ extension ListController: UITextFieldDelegate {
             // brings up the popup
             popUp.animateView(transform: CGAffineTransform(translationX: 0, y: -keyboardHeight), duration: 0.5)
             heightToAnimate -= 70
+        } else {
+            toDoToUpdate = CoreDataManager.shared.fetchToDo(title: textField.text!)
         }
+        
         bgBottom.constant = heightToAnimate
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
@@ -170,7 +177,13 @@ extension ListController: UITextFieldDelegate {
         }
         if textField == popUp.textField {
             // brings down the popup
+            addItemToList(text: textField.text!)
             popUp.animateView(transform: CGAffineTransform(translationX: 0, y: 0), duration: 0.6)
+        } else {
+            if let toDoToUpdate = toDoToUpdate {
+                CoreDataManager.shared.deleteToDo(id: toDoToUpdate.id)
+                CoreDataManager.shared.createToDo(id: toDoToUpdate.id, title: textField.text!, status: toDoToUpdate.status)
+            }
         }
     }
     

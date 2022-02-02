@@ -17,7 +17,7 @@ class GDListCell: UITableViewCell {
         if let delegate = self.delegate, let toDo = self.toDo {
 //            let newToDo = ToDo(id: toDo.id, title: textField.text!, status: !toDo.status)
 //            delegate.toogleToDo(updatedToDo: newToDo)
-//            CoreDataManager.shared.deleteToDo()
+            CoreDataManager.shared.deleteToDo(id: toDo.id)
             CoreDataManager.shared.createToDo(id: toDo.id, title: textField.text!, status: !toDo.status)
             delegate.toogleToDo()
         }

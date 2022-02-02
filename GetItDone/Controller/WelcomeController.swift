@@ -52,6 +52,8 @@ class WelcomeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UserDefaults.standard.set(true, forKey: "welcome-controller-visited")
+        
         view.backgroundColor = .white
         
         view.addSubview(bg)
@@ -86,7 +88,6 @@ class WelcomeController: UIViewController {
         copyrightLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         copyrightLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         copyrightLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
-        
         
     }
     
